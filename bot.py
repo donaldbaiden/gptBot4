@@ -14,15 +14,12 @@ import gpt
 
 
 class UserStates(StatesGroup):
+    default = State()
     thread_id = State()
 
 
-async def create_redis_client():
-    return await Redis(host=settings.host, port=settings.port, decode_responses=True)
-
-
 async def main():
-    r = await create_redis_client()
+    r = await Redis(host="localhost", port=settings.port, decode_responses=True)
 
     dp = Dispatcher(storage=RedisStorage(redis=r))
     bot = Bot(token=settings.telegram_token)
@@ -30,7 +27,7 @@ async def main():
     # Start command handler
     @dp.message(filters.CommandStart())
     async def start(message: types.Message, state: FSMContext):
-        await state.set_state(UserStates.thread_id)
+        await state.set_state(UserStates.default)
         await message.reply("Привет, отправь мне голосовое сообщение!")
 
     # Voice message handler
@@ -60,7 +57,7 @@ async def main():
         os.remove(voice_file_path)
 
     # Handler to retrieve and display the thread_id
-    @dp.message(F.text == "thread", UserStates.thread_id)
+    @dp.message(UserStates.thread_id, F.text == "thread")
     async def prthread(message: types.Message, state: FSMContext):
         st = await state.get_data()
         dt = st.get("thread_id")

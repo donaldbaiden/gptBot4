@@ -6,16 +6,15 @@ services:
     environment:
       - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - REDIS_HOST=${REDIS_HOST}
-      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_HOST=localhost
+      - REDIS_PORT=6379
     depends_on:
       - redis
     volumes:
-      - /Users/mihailkoruzn/Documents/BotProjects/gptBot4
+      - .:/app
     command: python bot.py
 
   redis:
     image: redis:latest
-    hostname: "localhost"
     ports:
       - "6379:6379"
