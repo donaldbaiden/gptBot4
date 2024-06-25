@@ -1,0 +1,8 @@
+aiogram~=3.8.0
+pydantic
+python-dotenv~=1.0.1
+openai~=1.35.3
+pydantic-settings
+docker
+redis~=5.0.6
+apscheduler
