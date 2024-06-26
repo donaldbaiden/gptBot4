@@ -19,7 +19,7 @@ class UserStates(StatesGroup):
 
 
 async def main():
-    r = await Redis(host="localhost", port=settings.port, decode_responses=True)
+    r = await Redis(host="redis", port=settings.port, decode_responses=True)
 
     dp = Dispatcher(storage=RedisStorage(redis=r))
     bot = Bot(token=settings.telegram_token)
